@@ -15,7 +15,7 @@ int main()
     static int Clients=0;
     int MaxClients=30;
     vector<sockaddr_in> ClientsAddr;
-    vector<double> Orders;
+    vector<int> Orders;
 
     WSADATA wsadata;
 
@@ -81,6 +81,7 @@ int main()
         if (Found != string::npos) {
             CookingTime += FriesTime;
         }
+        Orders.push_back(CookingTime);
 
         const size_t sendBufSize = 2024;
         char sendBuf[sendBufSize] = "Cooking in progress...";
@@ -95,8 +96,13 @@ int main()
         Sleep(CookingTime);
 
         char sendBuf1[sendBufSize] = "Your order is ready!";
+        //vector<sockaddr_in>::iterator position = find(ClientsAddr.begin(), ClientsAddr.end(), senderAddr);
+        //if (position != ClientsAddr.end())
+        //    ClientsAddr.erase(position);
+        vector<int>::iterator position = find(Orders.begin(), Orders.end(), CookingTime);
+        if (position != Orders.end()) // == myVector.end() means the element was not found
+            Orders.erase(position);
         Clients--;
-
         sendResult = sendto(udpSocket, sendBuf1, strlen(sendBuf1), 0, (SOCKADDR*)&senderAddr, senderAddrSize);
 
     }
