@@ -96,11 +96,9 @@ int main()
         Sleep(CookingTime);
 
         char sendBuf1[sendBufSize] = "Your order is ready!";
-        //vector<sockaddr_in>::iterator position = find(ClientsAddr.begin(), ClientsAddr.end(), senderAddr);
-        //if (position != ClientsAddr.end())
-        //    ClientsAddr.erase(position);
+
         vector<int>::iterator position = find(Orders.begin(), Orders.end(), CookingTime);
-        if (position != Orders.end()) // == myVector.end() means the element was not found
+        if (position != Orders.end())
             Orders.erase(position);
         Clients--;
         sendResult = sendto(udpSocket, sendBuf1, strlen(sendBuf1), 0, (SOCKADDR*)&senderAddr, senderAddrSize);
